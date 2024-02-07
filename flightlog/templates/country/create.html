@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Create new country{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
+
+        <label for="shorty">Shorty</label>
+        <input type="text" id="shorty" name="shorty">
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

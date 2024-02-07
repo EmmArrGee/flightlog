@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Overview{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>No.</th>
+            <th>Date</th>
+            <th>Wing</th>
+            <th>Launch</th>
+            <th>Landing</th>
+            <th>Descent</th>
+            <th>Duration</th>
+            <th>Type</th>
+            <th>Hike&amp;Fly</th>
+            <th>With skies</th>
+        </tr>
+        {% for flight in flights %}
+            <tr>
+                <td>{{ flight["flight_no"] }}</td>
+                <td>{{ flight["date"] }}</td>
+                <td>{{ flight["wing_manufacturer"] }} - {{ flight["wing_name"] }} - {{ flight["wing_size"] }}</td>
+                <td>{{ flight["launch_site"] }}</td>
+                <td>{{ flight["landing_site"] }}</td>
+                <td>{{ flight["descent"] }}m</td>
+                {% if flight["duration"] %}
+                    <td>{{ flight["duration"] }}</td>
+                {% else %}
+                    <td style="text-align: center">-</td>
+                {% endif %}
+                <td>{{ flight["flight_type"] }}</td>
+                <td style="text-align: center">{% if flight["hike_and_fly"] == 1 %}&#10003;{% endif %}</td>
+                <td style="text-align: center">{% if flight["with_skies"] == 1 %}&#10003;{% endif %}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('flight.create') }}">
+        <input type="submit" value="Log new flight(s)">
+    </form>
+{% endblock %}

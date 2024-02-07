@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage flight types{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Category</th>
+        </tr>
+        {% for flight_type in flight_types %}
+            <tr>
+                <td>{{ flight_type['name'] }}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('flight_type.create') }}">
+        <input type="submit" value="Create new flight type">
+    </form>
+{% endblock %}

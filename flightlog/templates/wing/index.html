@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage wings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Manufacturer</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Projected area</th>
+        </tr>
+        {% for wing in wings %}
+            <tr>
+                <td>{{ wing['manufacturer'] }}</td>
+                <td>{{ wing['type'] }}</td>
+                <td>{{ wing['size_designator'] }}</td>
+                <td>{{ wing['size_projected_sqm'] }}m²</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('wing.create') }}">
+        <input type="submit" value="Create new wing">
+    </form>
+{% endblock %}

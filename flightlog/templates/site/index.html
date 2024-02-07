@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage sites{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Elevation</th>
+            <th>Launch</th>
+            <th>Landing</th>
+        </tr>
+        {% for site in sites %}
+            <tr>
+                <td>{{ site['name'] }}</td>
+                <td>{{ site['country'] }}</td>
+                <td>{{ site['elevation'] }}m</td>
+                <td style="text-align: center">{% if site["is_launch"] == 1 %}&#10003;{% endif %}</td>
+                <td style="text-align: center">{% if site["is_landing"] == 1 %}&#10003;{% endif %}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('site.create') }}">
+        <input type="submit" value="Create new site">
+    </form>
+{% endblock %}

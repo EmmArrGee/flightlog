@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage countries{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Name</th>
+            <th>Shorty</th>
+        </tr>
+        {% for country in countries %}
+            <tr>
+                <td>{{ country['name'] }}</td>
+                <td>{{ country['shorty'] }}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('country.create') }}">
+        <input type="submit" value="Create new country">
+    </form>
+{% endblock %}

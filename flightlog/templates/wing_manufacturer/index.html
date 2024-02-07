@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage wing manufacturers{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Name</th>
+        </tr>
+        {% for manufacturer in manufacturers %}
+            <tr>
+                <td>{{ manufacturer['name'] }}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('wing_manufacturer.create') }}">
+        <input type="submit" value="Create new manufacturer">
+    </form>
+{% endblock %}

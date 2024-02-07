@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Create new wing type{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        <label for="manufacturer_id">Manufacturer</label>
+        <select name="manufacturer_id" id="manufacturer_id">
+            {% for manufacturer in manufacturers %}
+                <option value="{{ manufacturer['id'] }}">{{ manufacturer["name"] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="name">Name</label>
+        <input type="Text" name="name" id="name">
+
+        <input type="submit" value="Save">
+    </form>
+
+    <form action="{{ url_for('wing_manufacturer.index') }}">
+        <input type="submit" value="Manage wing manufacturers">
+    </form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Manage wing types{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <caption></caption>
+        <tr>
+            <th>Manufacturer</th>
+            <th>Name</th>
+        </tr>
+        {% for type in types %}
+            <tr>
+                <td>{{ type['manufacturer'] }}</td>
+                <td>{{ type['name'] }}</td>
+            </tr>     
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for('wing_type.create') }}">
+        <input type="submit" value="Create new wing type">
+    </form>
+{% endblock %}

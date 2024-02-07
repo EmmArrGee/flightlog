@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Create new site{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
+
+        <label for="country">Country</label>
+        <select name="country" id="country">
+            {% for country in countries %}
+                <option value="{{ country['id'] }}">{{ country["name"] }} ({{ country["shorty"] }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="elevation">Elevation [m]</label>
+        <input type="number" id="elevation" name="elevation">
+
+        <label for="is_launch">Launch</label>
+        <input type="checkbox" id="is_launch" name="is_launch">
+
+        <label for="is_landing">Landing</label>
+        <input type="checkbox" id="is_landing" name="is_landing">
+
+        <input type="submit" value="Save">
+    </form>
+
+    <form action="{{ url_for('country.index') }}">
+        <input type="submit" value="Manage countries">
+    </form>
+{% endblock %}

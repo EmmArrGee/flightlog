@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Log new flight(s){% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" value="{{ today }}" required>
+
+        <label for="amount">Number of flights</label>
+        <input type="number" name="amount" id="amount" min="1" value="1">
+
+        <label for="wing">Wing</label>
+        <select name="wing" id="wing">
+            {% for wing in wings %}
+                <option value="{{ wing['id'] }}">{{ wing['manufacturer'] }} - {{ wing['type'] }} - {{ wing['size_designator'] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="launch_site">Launch site</label>
+        <select name="launch_site" id="launch_site">
+            {% for launch_site in launch_sites %}
+                <option value="{{ launch_site['id'] }}">{{ launch_site['name'] }}, {{ launch_site['country'] }} - {{ launch_site['elevation'] }}m</option>
+            {% endfor %}
+        </select>
+
+        <label for="landing_site">Landing site</label>
+        <select name="landing_site" id="landing_site">
+            {% for landing_site in landing_sites %}
+                <option value="{{ landing_site['id'] }}">{{ landing_site['name'] }}, {{ landing_site['country'] }} - {{ landing_site['elevation'] }}m</option>
+            {% endfor %}
+        </select>
+
+        <label for="flight_type">Flight type</label>
+        <select name="flight_type" id="flight_type">
+            {% for flight_type in flight_types %}
+                <option value="{{ flight_type['id'] }}">{{ flight_type['name'] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="hike_and_fly">Hike&amp;Fly</label>
+        <input type="checkbox" id="hike_and_fly" name="hike_and_fly">
+
+        <label for="with_skies">With skies</label>
+        <input type="checkbox" id="with_skies" name="with_skies">
+
+        <label for="duration">Duration [minutes]</label>
+        <input type="text" id="duration" name="duration" required pattern="^[0-9]*$" value="0">
+
+        <label for="comment">Comment</label>
+        <input type="text" id="comment" name="comment">
+
+        <input type="submit" value="Save">
+    </form>
+
+    <form action="{{ url_for('wing.index') }}">
+        <input type="submit" value="Manage wings">
+    </form>
+
+    <form action="{{ url_for('site.index') }}">
+        <input type="submit" value="Manage sites">
+    </form>
+
+    <form action="{{ url_for('flight_type.index')}}">
+        <input type="submit" value="Manage flight types">
+    </form>
+{% endblock %}
