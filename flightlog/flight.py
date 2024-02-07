@@ -88,6 +88,16 @@ def create():
         FROM wing w
             JOIN wing_type wt ON w.wing_type_id = wt.id
             JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+            LEFT JOIN (
+                SELECT
+                    w2.id as wing_id,
+                    COUNT(*) as uses
+                FROM flight f2
+                    JOIN wing w2 ON f2.wing_id = w2.id
+                WHERE f2.date >= DATE((SELECT MAX(date) FROM flight), '-14 days')
+                GROUP BY wing_id
+            ) ranking ON ranking.wing_id = w.id
+        ORDER BY ranking.uses DESC, wm.name ASC, wt.name ASC
         """
     ).fetchall()
     launch_sites = db.execute(
@@ -99,8 +109,20 @@ def create():
             s.elevation as elevation
         FROM site s
             JOIN country c ON s.country_id = c.id
+            LEFT JOIN (
+                SELECT
+                    s2.id as site_id,
+                    COUNT(*) as visits
+                FROM flight f
+                    JOIN site s2 on f.launch_site_id = s2.id
+                WHERE
+                    f.date >= DATE((SELECT MAX(date) FROM flight), '-14 days') AND
+                    s2.is_launch = 1
+                GROUP BY site_id
+            ) ranking ON ranking.site_id = s.id
         WHERE
             s.is_launch = 1
+        ORDER BY ranking.visits DESC, s.name ASC, c.shorty ASC
         """
     ).fetchall()
     landing_sites = db.execute(
@@ -112,15 +134,38 @@ def create():
             s.elevation as elevation
         FROM site s
             JOIN country c ON s.country_id = c.id
+            LEFT JOIN (
+                SELECT
+                    s2.id as site_id,
+                    COUNT(*) as visits
+                FROM flight f
+                    LEFT JOIN site s2 on f.landing_site_id = s2.id
+                WHERE
+                    f.date >= DATE((SELECT MAX(date) FROM flight), '-14 days') AND
+                    s2.is_landing = 1
+                GROUP BY site_id
+            ) ranking ON ranking.site_id = s.id
         WHERE
             s.is_landing = 1
+        ORDER BY ranking.visits DESC, s.name ASC, c.shorty ASC
         """
     ).fetchall()
     flight_types = db.execute(
         """
         SELECT
-            id, name
-        FROM flight_type
+            ft.id, ft.name
+        FROM flight_type ft
+            LEFT JOIN (
+                SELECT
+                    ft2.id as flight_type_id,
+                    COUNT(*) as flights
+                FROM flight f
+                    JOIN flight_type ft2 on f.flight_type_id = ft2.id
+                WHERE
+                    f.date >= DATE((SELECT MAX(date) FROM flight), '-14 days')
+                GROUP BY flight_type_id
+            ) ranking ON ranking.flight_type_id = ft.id
+        ORDER BY ranking.flights DESC, ft.name ASC
         """
     ).fetchall()
 
