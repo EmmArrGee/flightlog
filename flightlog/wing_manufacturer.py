@@ -14,6 +14,7 @@ def index():
             SELECT
                 wm.name as name
             FROM wing_manufacturer wm
+            ORDER BY wm.name ASC
         """
     ).fetchall()
 

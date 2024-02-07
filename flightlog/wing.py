@@ -19,6 +19,10 @@ def index():
         FROM wing as w
             JOIN wing_type wt ON w.wing_type_id = wt.id
             JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+        ORDER BY
+            wm.name ASC,
+            wt.name ASC,
+            w.size_projected_sqm ASC
         """
     ).fetchall()
     return render_template("wing/index.html", wings=wings)
@@ -51,6 +55,9 @@ def create():
             wm.name as manufacturer
         FROM wing_type wt
             JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+        ORDER BY
+            wm.name ASC,
+            wt.name ASC
         """
     ).fetchall()
 

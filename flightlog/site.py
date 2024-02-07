@@ -19,6 +19,9 @@ def index():
             s.is_landing as is_landing
         FROM site s
             JOIN country c ON s.country_id = c.id
+        ORDER BY
+            s.name ASC,
+            s.elevation ASC
         """
     ).fetchall()
     return render_template("site/index.html", sites=sites)
@@ -52,6 +55,7 @@ def create():
             c.name as name,
             c.shorty as shorty
         FROM country c
+        ORDER BY c.name ASC
         """
     ).fetchall()
 

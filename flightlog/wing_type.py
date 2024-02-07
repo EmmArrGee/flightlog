@@ -16,6 +16,9 @@ def index():
                 wm.name as manufacturer
             FROM wing_type wt
                 JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+            ORDER BY
+                wm.name ASC,
+                wt.name ASC
         """
     ).fetchall()
 
