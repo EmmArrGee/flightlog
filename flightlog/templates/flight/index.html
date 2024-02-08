@@ -18,6 +18,8 @@
             <th>Type</th>
             <th>Hike&amp;Fly</th>
             <th>With skies</th>
+            <th>Comment</th>
+            <th></th>
         </tr>
         {% for flight in flights %}
             <tr>
@@ -35,6 +37,8 @@
                 <td>{{ flight["flight_type"] }}</td>
                 <td style="text-align: center">{% if flight["hike_and_fly"] == 1 %}&#10003;{% endif %}</td>
                 <td style="text-align: center">{% if flight["with_skies"] == 1 %}&#10003;{% endif %}</td>
+                <td>{{ flight["comment"] }}</td>
+                <td><form action="{{ url_for('flight.update', id=flight['id'])}}"><input type="submit" value="Edit"></form></td>
             </tr>     
         {% endfor %}
     </table>

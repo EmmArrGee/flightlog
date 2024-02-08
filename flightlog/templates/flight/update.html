@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Edit flight{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" value="{{ request.form['date'] or flight['date'] }}">
+
+        <label for="wing">Wing</label>
+        <select name="wing" id="wing">
+            {% for wing in wings %}
+                {% if wing['id'] == flight['wing_id'] %}
+                    <option value="{{ wing['id'] }}" selected>{{ wing['manufacturer'] }} - {{ wing['type'] }} - {{ wing['size_designator'] }}</option>
+                {% else %}
+                    <option value="{{ wing['id'] }}">{{ wing['manufacturer'] }} - {{ wing['type'] }} - {{ wing['size_designator'] }}</option>
+                {% endif %}                
+            {% endfor %}
+        </select>
+
+        <label for="launch_site">Launch site</label>
+        <select name="launch_site" id="launch_site">
+            {% for launch_site in launch_sites %}
+                {% if launch_site['id'] == flight['launch_site_id'] %}
+                    <option value="{{ launch_site['id'] }}" selected>{{ launch_site['name'] }}, {{ launch_site['country'] }} - {{ launch_site['elevation'] }}m</option>
+                {% else %}
+                    <option value="{{ launch_site['id'] }}">{{ launch_site['name'] }}, {{ launch_site['country'] }} - {{ launch_site['elevation'] }}m</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <label for="landing_site">Landing site</label>
+        <select name="landing_site" id="landing_site">
+            {% for landing_site in landing_sites %}
+                {% if landing_site['id'] == flight['landing_site_id'] %}
+                    <option value="{{ landing_site['id'] }}" selected>{{ landing_site['name'] }}, {{ landing_site['country'] }} - {{ landing_site['elevation'] }}m</option>
+                {% else %}
+                    <option value="{{ landing_site['id'] }}">{{ landing_site['name'] }}, {{ landing_site['country'] }} - {{ landing_site['elevation'] }}m</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <label for="flight_type">Flight type</label>
+        <select name="flight_type" id="flight_type">
+            {% for flight_type in flight_types %}
+                {% if flight_type['id'] == flight['flight_type_id'] %}
+                    <option value="{{ flight_type['id'] }}" selected>{{ flight_type['name'] }}</option>
+                {% else %}
+                    <option value="{{ flight_type['id'] }}">{{ flight_type['name'] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <label for="hike_and_fly">Hike&amp;Fly</label>
+        {% if flight['hike_and_fly'] == 1 %}
+            <input type="checkbox" id="hike_and_fly" name="hike_and_fly" checked>
+        {% else %}
+            <input type="checkbox" id="hike_and_fly" name="hike_and_fly">
+        {% endif %}
+        
+
+        <label for="with_skies">With skies</label>
+        {% if flight['with_skies'] == 1 %}
+            <input type="checkbox" id="with_skies" name="with_skies" checked>
+        {% else %}
+            <input type="checkbox" id="with_skies" name="with_skies">
+        {% endif %}
+
+        <label for="duration">Duration [minutes]</label>
+        <input type="text" id="duration" name="duration" value="{{ request.form['duration'] or flight['duration_minutes'] or '' }}">
+
+        <label for="comment">Comment</label>
+        <input type="text" id="comment" name="comment" value="{{ request.form['comment'] or flight['comment'] }}">
+
+        <input type="submit" value="Save">
+    </form>
+
+    <form action="{{ url_for('flight.delete', id=flight['id']) }}" method="post">
+        <input class="danger" type="submit" value="Delete" onlick="return confirm('Are you sure?');">
+    </form>
+{% endblock %}
