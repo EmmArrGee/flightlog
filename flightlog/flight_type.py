@@ -14,9 +14,9 @@ def index():
         SELECT
             ft.id as id,
             ft.name as name,
-            COUNT(*) as total_flights
+            COUNT(f.id) as total_flights
         FROM flight_type ft
-            JOIN flight f on f.flight_type_id = ft.id
+            LEFT JOIN flight f on f.flight_type_id = ft.id
         GROUP BY ft.id
         ORDER BY ft.name ASC
         """

@@ -14,11 +14,11 @@ def index():
             SELECT
                 wm.id as id,
                 wm.name as name,
-                COUNT(*) as total_flights
+                COUNT(f.id) as total_flights
             FROM wing_manufacturer wm
-                JOIN wing_type wt ON wm.id = wt.wing_manufacturer_id
-                JOIN wing w ON wt.id = w.wing_type_id
-                JOIN flight f ON w.id = f.wing_id
+                LEFT JOIN wing_type wt ON wm.id = wt.wing_manufacturer_id
+                LEFT JOIN wing w ON wt.id = w.wing_type_id
+                LEFT JOIN flight f ON w.id = f.wing_id
             GROUP BY wm.id
             ORDER BY wm.name ASC
         """

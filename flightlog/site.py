@@ -18,10 +18,10 @@ def index():
             s.elevation as elevation,
             s.is_launch as is_launch,
             s.is_landing as is_landing,
-            COUNT(*) as total_flights
+            COUNT(f.id) as total_flights
         FROM site s
             JOIN country c ON s.country_id = c.id
-            JOIN flight f ON f.launch_site_id = s.id OR f.landing_site_id = s.id
+            LEFT JOIN flight f ON f.launch_site_id = s.id OR f.landing_site_id = s.id
         GROUP BY s.id
         ORDER BY
             s.name ASC,
