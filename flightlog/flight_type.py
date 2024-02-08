@@ -12,8 +12,13 @@ def index():
     flight_types = db.execute(
         """
         SELECT
-            ft.name
+            ft.id as id,
+            ft.name as name,
+            COUNT(*) as total_flights
         FROM flight_type ft
+            JOIN flight f on f.flight_type_id = ft.id
+        GROUP BY ft.id
+        ORDER BY ft.name ASC
         """
     ).fetchall()
     return render_template("flight_type/index.html", flight_types=flight_types)

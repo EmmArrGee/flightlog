@@ -9,10 +9,12 @@
         <caption></caption>
         <tr>
             <th>Category</th>
+            <th>Total flights</th>
         </tr>
         {% for flight_type in flight_types %}
             <tr>
                 <td>{{ flight_type['name'] }}</td>
+                <td>{{ flight_type['total_flights'] }}</td>
             </tr>     
         {% endfor %}
     </table>
