@@ -12,6 +12,7 @@
             <th>Type</th>
             <th>Size</th>
             <th>Projected area</th>
+            <th>Total flights</th>
         </tr>
         {% for wing in wings %}
             <tr>
@@ -19,6 +20,7 @@
                 <td>{{ wing['type'] }}</td>
                 <td>{{ wing['size_designator'] }}</td>
                 <td>{{ wing['size_projected_sqm'] }}m²</td>
+                <td>{{ wing['total_flights'] }}</td>
             </tr>     
         {% endfor %}
     </table>

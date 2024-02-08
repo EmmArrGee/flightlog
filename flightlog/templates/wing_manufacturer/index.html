@@ -9,10 +9,12 @@
         <caption></caption>
         <tr>
             <th>Name</th>
+            <th>Total flights</th>
         </tr>
         {% for manufacturer in manufacturers %}
             <tr>
                 <td>{{ manufacturer['name'] }}</td>
+                <td>{{ manufacturer['total_flights'] }}</td>
             </tr>     
         {% endfor %}
     </table>

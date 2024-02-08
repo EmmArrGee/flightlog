@@ -15,10 +15,13 @@ def index():
             wm.name as manufacturer,
             wt.name as type,
             w.size_designator as size_designator,
-            w.size_projected_sqm as size_projected_sqm
+            w.size_projected_sqm as size_projected_sqm,
+            COUNT(*) as total_flights
         FROM wing as w
             JOIN wing_type wt ON w.wing_type_id = wt.id
             JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+            JOIN flight f ON w.id = f.wing_id
+        GROUP BY w.id
         ORDER BY
             wm.name ASC,
             wt.name ASC,

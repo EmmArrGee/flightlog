@@ -12,8 +12,14 @@ def index():
     manufacturers = db.execute(
         """
             SELECT
-                wm.name as name
+                wm.id as id,
+                wm.name as name,
+                COUNT(*) as total_flights
             FROM wing_manufacturer wm
+                JOIN wing_type wt ON wm.id = wt.wing_manufacturer_id
+                JOIN wing w ON wt.id = w.wing_type_id
+                JOIN flight f ON w.id = f.wing_id
+            GROUP BY wm.id
             ORDER BY wm.name ASC
         """
     ).fetchall()

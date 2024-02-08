@@ -10,11 +10,13 @@
         <tr>
             <th>Manufacturer</th>
             <th>Name</th>
+            <th>Total flights</th>
         </tr>
         {% for type in types %}
             <tr>
                 <td>{{ type['manufacturer'] }}</td>
                 <td>{{ type['name'] }}</td>
+                <td>{{ type['total_flights'] }}</td>
             </tr>     
         {% endfor %}
     </table>
