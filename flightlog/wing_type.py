@@ -15,7 +15,8 @@ def index():
                 wt.id as id,
                 wt.name as name,
                 wm.name as manufacturer,
-                COUNT(f.id) as total_flights
+                COUNT(f.id) as total_flights,
+                (SUM(f.duration_minutes) / 60) || 'h ' || (SUM(f.duration_minutes) % 60) || 'm' as total_flight_time
             FROM wing_type wt
                 JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
                 LEFT JOIN wing w ON wt.id = w.wing_type_id

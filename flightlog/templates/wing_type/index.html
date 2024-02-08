@@ -11,12 +11,14 @@
             <th>Manufacturer</th>
             <th>Name</th>
             <th>Total flights</th>
+            <th>Total flight time</th>
         </tr>
         {% for type in types %}
             <tr>
                 <td>{{ type['manufacturer'] }}</td>
                 <td>{{ type['name'] }}</td>
                 <td>{{ type['total_flights'] }}</td>
+                <td>{{ type['total_flight_time'] }}</td>
             </tr>     
         {% endfor %}
     </table>
