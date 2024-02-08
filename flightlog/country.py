@@ -12,9 +12,15 @@ def index():
     countries = db.execute(
         """
         SELECT
+            c.id as id,
             c.name as name,
-            c.shorty as shorty
+            c.shorty as shorty,
+            COUNT(f.id) / 2 as total_flights
         FROM country c
+            LEFT JOIN site s ON c.id = s.country_id
+            LEFT JOIN flight f ON s.id = f.launch_site_id OR s.id = f.landing_site_id
+        GROUP BY c.id
+        ORDER BY c.name ASC
         """
     ).fetchall()
     return render_template("country/index.html", countries=countries)

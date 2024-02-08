@@ -10,11 +10,13 @@
         <tr>
             <th>Name</th>
             <th>Shorty</th>
+            <th>Total flights</th>
         </tr>
         {% for country in countries %}
             <tr>
                 <td>{{ country['name'] }}</td>
                 <td>{{ country['shorty'] }}</td>
+                <td>{{ country['total_flights'] }}</td>
             </tr>     
         {% endfor %}
     </table>
