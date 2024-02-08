@@ -12,13 +12,17 @@ def index():
     sites = db.execute(
         """
         SELECT
+            s.id as id,
             s.name as name,
             c.shorty as country,
             s.elevation as elevation,
             s.is_launch as is_launch,
-            s.is_landing as is_landing
+            s.is_landing as is_landing,
+            COUNT(*) as total_flights
         FROM site s
             JOIN country c ON s.country_id = c.id
+            JOIN flight f ON f.launch_site_id = s.id OR f.landing_site_id = s.id
+        GROUP BY s.id
         ORDER BY
             s.name ASC,
             s.elevation ASC
