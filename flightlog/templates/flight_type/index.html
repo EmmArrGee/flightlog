@@ -1,25 +1,32 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Manage flight types{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Manage flight types{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('flight_type.create') }}">
+                <input type="submit" value="Add new flight type" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>Category</th>
-            <th>Total flights</th>
-        </tr>
-        {% for flight_type in flight_types %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ flight_type['name'] }}</td>
-                <td>{{ flight_type['total_flights'] }}</td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">Category</th>
+                <th scope="col" class="px-6 py-3">Total flights</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight_type in flight_types %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">{{ flight_type['name'] }}</td>
+                    <td class="px-6 py-4">{{ flight_type['total_flights'] }}</td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('flight_type.create') }}">
-        <input type="submit" value="Create new flight type">
-    </form>
 {% endblock %}

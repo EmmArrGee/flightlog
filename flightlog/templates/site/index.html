@@ -1,33 +1,40 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Manage sites{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Manage sites{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('site.create') }}">
+                <input type="submit" value="Add new site" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>Name</th>
-            <th>Country</th>
-            <th>Elevation</th>
-            <th>Launch</th>
-            <th>Landing</th>
-            <th>Total flights</th>
-        </tr>
-        {% for site in sites %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ site['name'] }}</td>
-                <td>{{ site['country'] }}</td>
-                <td>{{ site['elevation'] }}m</td>
-                <td style="text-align: center">{% if site["is_launch"] == 1 %}&#10003;{% endif %}</td>
-                <td style="text-align: center">{% if site["is_landing"] == 1 %}&#10003;{% endif %}</td>
-                <td>{{ site['total_flights'] }}</td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">Country</th>
+                <th scope="col" class="px-6 py-3">Elevation</th>
+                <th scope="col" class="px-6 py-3 text-center">Launch</th>
+                <th scope="col" class="px-6 py-3 text-center">Landing</th>
+                <th scope="col" class="px-6 py-3">Total flights</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for site in sites %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">{{ site['name'] }}</td>
+                    <td class="px-6 py-4">{{ site['country'] }}</td>
+                    <td class="px-6 py-4">{{ site['elevation'] }}m</td>
+                    <td class="px-6 py-4 text-center">{% if site["is_launch"] == 1 %}&#10003;{% endif %}</td>
+                    <td class="px-6 py-4 text-center">{% if site["is_landing"] == 1 %}&#10003;{% endif %}</td>
+                    <td class="px-6 py-4">{{ site['total_flights'] }}</td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('site.create') }}">
-        <input type="submit" value="Create new site">
-    </form>
 {% endblock %}

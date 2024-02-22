@@ -1,25 +1,32 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Manage wing manufacturers{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Manage wing manufacturers{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('wing_manufacturer.create') }}">
+                <input type="submit" value="Add new wing manufacturer" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>Name</th>
-            <th>Total flights</th>
-        </tr>
-        {% for manufacturer in manufacturers %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ manufacturer['name'] }}</td>
-                <td>{{ manufacturer['total_flights'] }}</td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">Total flights</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manufacturer in manufacturers %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">{{ manufacturer['name'] }}</td>
+                    <td class="px-6 py-4">{{ manufacturer['total_flights'] }}</td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('wing_manufacturer.create') }}">
-        <input type="submit" value="Create new manufacturer">
-    </form>
 {% endblock %}

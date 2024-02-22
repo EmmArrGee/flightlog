@@ -1,31 +1,38 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Manage wings{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Manage wings{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('wing.create') }}">
+                <input type="submit" value="Add new wing" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>Manufacturer</th>
-            <th>Type</th>
-            <th>Size</th>
-            <th>Projected area</th>
-            <th>Total flights</th>
-        </tr>
-        {% for wing in wings %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ wing['manufacturer'] }}</td>
-                <td>{{ wing['type'] }}</td>
-                <td>{{ wing['size_designator'] }}</td>
-                <td>{{ wing['size_projected_sqm'] }}m²</td>
-                <td>{{ wing['total_flights'] }}</td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">Manufacturer</th>
+                <th scope="col" class="px-6 py-3">Type</th>
+                <th scope="col" class="px-6 py-3">Size</th>
+                <th scope="col" class="px-6 py-3">Projected area</th>
+                <th scope="col" class="px-6 py-3">Total flights</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wing in wings %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">{{ wing['manufacturer'] }}</td>
+                    <td class="px-6 py-4">{{ wing['type'] }}</td>
+                    <td class="px-6 py-4">{{ wing['size_designator'] }}</td>
+                    <td class="px-6 py-4">{{ wing['size_projected_sqm'] }}m²</td>
+                    <td class="px-6 py-4">{{ wing['total_flights'] }}</td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('wing.create') }}">
-        <input type="submit" value="Create new wing">
-    </form>
 {% endblock %}

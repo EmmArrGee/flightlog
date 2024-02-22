@@ -1,29 +1,36 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Manage wing types{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Manage wing types{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('wing_type.create') }}">
+                <input type="submit" value="Add new wing type" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>Manufacturer</th>
-            <th>Name</th>
-            <th>Total flights</th>
-            <th>Total flight time</th>
-        </tr>
-        {% for type in types %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ type['manufacturer'] }}</td>
-                <td>{{ type['name'] }}</td>
-                <td>{{ type['total_flights'] }}</td>
-                <td>{{ type['total_flight_time'] }}</td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">Manufacturer</th>
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">Total flights</th>
+                <th scope="col" class="px-6 py-3">Total flight time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type in types %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4">{{ type['manufacturer'] }}</td>
+                    <td class="px-6 py-4">{{ type['name'] }}</td>
+                    <td class="px-6 py-4">{{ type['total_flights'] }}</td>
+                    <td class="px-6 py-4">{{ type['total_flight_time'] }}</td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('wing_type.create') }}">
-        <input type="submit" value="Create new wing type">
-    </form>
 {% endblock %}
