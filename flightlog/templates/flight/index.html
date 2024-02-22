@@ -1,49 +1,57 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Overview{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Overview{% endblock %}
+        <span class="bg-blue-100 text-sm text-blue-800 font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">
+            <form action="{{ url_for('flight.create') }}">
+                <input type="submit" value="Log new flight(s)" class="cursor-pointer">
+            </form>
+        </span>
+    </h3>
+
 {% endblock %}
 
 {% block content %}
-    <table>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption></caption>
-        <tr>
-            <th>No.</th>
-            <th>Date</th>
-            <th>Wing</th>
-            <th>Launch</th>
-            <th>Landing</th>
-            <th>Descent</th>
-            <th>Duration</th>
-            <th>Type</th>
-            <th>Hike&amp;Fly</th>
-            <th>Ski</th>
-            <th>Comment</th>
-            <th></th>
-        </tr>
-        {% for flight in flights %}
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>{{ flight["flight_no"] }}</td>
-                <td>{{ flight["date"] }}</td>
-                <td>{{ flight["wing_manufacturer"] }} - {{ flight["wing_name"] }} - {{ flight["wing_size"] }}</td>
-                <td>{{ flight["launch_site"] }}</td>
-                <td>{{ flight["landing_site"] }}</td>
-                <td>{{ flight["descent"] }}m</td>
-                {% if flight["duration"] %}
-                    <td>{{ flight["duration"] }}</td>
-                {% else %}
-                    <td style="text-align: center">-</td>
-                {% endif %}
-                <td>{{ flight["flight_type"] }}</td>
-                <td style="text-align: center">{% if flight["hike_and_fly"] == 1 %}&#10003;{% endif %}</td>
-                <td style="text-align: center">{% if flight["with_skies"] == 1 %}&#10003;{% endif %}</td>
-                <td>{{ flight["comment"] }}</td>
-                <td><form action="{{ url_for('flight.update', id=flight['id'])}}"><input type="submit" value="Edit"></form></td>
-            </tr>     
-        {% endfor %}
+                <th scope="col" class="px-6 py-3">No.</th>
+                <th scope="col" class="px-6 py-3">Date</th>
+                <th scope="col" class="px-6 py-3">Wing</th>
+                <th scope="col" class="px-6 py-3">Launch</th>
+                <th scope="col" class="px-6 py-3">Landing</th>
+                <th scope="col" class="px-6 py-3">Descent</th>
+                <th scope="col" class="px-6 py-3">Duration</th>
+                <th scope="col" class="px-6 py-3">Type</th>
+                <th scope="col" class="px-6 py-3 text-center">Hike&amp;Fly</th>
+                <th scope="col" class="px-6 py-3 text-center">Ski</th>
+                <th scope="col" class="px-6 py-3">Comment</th>
+                <th scope="col" class="px-6 py-3"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ flight["flight_no"] }}</td>
+                    <td class="px-6 py-4">{{ flight["date"] }}</td>
+                    <td class="px-6 py-4">{{ flight["wing_manufacturer"] }} {{ flight["wing_name"] }} {{ flight["wing_size"] }}</td>
+                    <td class="px-6 py-4">{{ flight["launch_site"] }}</td>
+                    <td class="px-6 py-4">{{ flight["landing_site"] }}</td>
+                    <td class="px-6 py-4">{{ flight["descent"] }}m</td>
+                    {% if flight["duration"] %}
+                        <td class="px-6 py-4">{{ flight["duration"] }}</td>
+                    {% else %}
+                        <td  class="px-6 py-4 text-center">-</td>
+                    {% endif %}
+                    <td class="px-6 py-4">{{ flight["flight_type"] }}</td>
+                    <td class="px-6 py-4 text-center">{% if flight["hike_and_fly"] == 1 %}&#10003;{% endif %}</td>
+                    <td  class="px-6 py-4 text-center">{% if flight["with_skies"] == 1 %}&#10003;{% endif %}</td>
+                    <td>{{ flight["comment"] }}</td>
+                    <td class="px-6 py-4"><form action="{{ url_for('flight.update', id=flight['id'])}}"><input type="submit" value="Edit" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 cursor-pointer"></form></td>
+                </tr>     
+            {% endfor %}
+        </tbody>
     </table>
-
-    <form action="{{ url_for('flight.create') }}">
-        <input type="submit" value="Log new flight(s)">
-    </form>
 {% endblock %}
