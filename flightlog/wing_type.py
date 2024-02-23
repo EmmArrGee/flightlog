@@ -9,7 +9,6 @@ wing_type = Blueprint("wing_type", __name__)
 @wing_type.route("/")
 def index():
     sort_criteria = request.args.get("sort")
-    print(sort_criteria)
     sort_criteria_dict = {
         "name": ("wt.name", "ASC"),
         "manufacturer": ("wm.name", "ASC"),
@@ -18,8 +17,6 @@ def index():
         "date": ("last_flown", "DESC"),
     }
     sort_criteria = sort_criteria_dict.get(sort_criteria, ("wm.name", "ASC"))
-
-    print(sort_criteria)
 
     db = get_db()
     types = db.execute(
