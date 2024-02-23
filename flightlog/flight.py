@@ -9,7 +9,18 @@ flight = Blueprint("flight", __name__)
 
 @flight.route("/")
 def index():
+    page = request.args.get("page", 1, type=int)
+    page_size = 10
+
     db = get_db()
+    num_flights = db.execute(
+        """
+        SELECT COUNT(*)
+        FROM flight
+        """
+    ).fetchone()[0]
+    page = min(max(1, page), num_flights // page_size + 1)
+
     flights = db.execute(
         """
         SELECT
@@ -36,12 +47,24 @@ def index():
             JOIN flight_type ft ON f.flight_type_id = ft.id
         ORDER BY
             flight_no DESC
-        LIMIT ?
+        LIMIT ? OFFSET ?
         """,
-        (request.args.get("limit", 25),),
+        (page_size, (page - 1) * page_size),
     ).fetchall()
 
-    return render_template("flight/index.html", flights=flights)
+    first_flight_no = flights[0]["flight_no"] if len(flights) > 0 else 0
+    last_flight_no = flights[-1]["flight_no"] if len(flights) > 0 else 0
+
+    return render_template(
+        "flight/index.html",
+        flights=flights,
+        first_item_no=first_flight_no,
+        last_item_no=last_flight_no,
+        total_items=num_flights,
+        current_page=page,
+        total_pages=(num_flights // page_size + 1),
+        other_params={},
+    )
 
 
 @flight.route("/create", methods=("GET", "POST"))
