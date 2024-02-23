@@ -10,7 +10,7 @@ flight = Blueprint("flight", __name__)
 @flight.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
-    page_size = 15
+    page_size = 10
 
     db = get_db()
     num_flights = db.execute(
