@@ -23,6 +23,7 @@ def index():
     wings = db.execute(
         f"""
         SELECT
+            w.id as id,
             wm.name as manufacturer,
             wt.name as type,
             w.size_designator as size_designator,
@@ -109,3 +110,68 @@ def get_wing(id):
         abort(404, f"Wing ID {id} doesn't exist.")
 
     return wing
+
+
+@wing.route("/<int:id>/update", methods=("GET", "POST"))
+def update(id):
+    wing = get_wing(id)
+
+    if request.method == "POST":
+        wing_type_id = int(request.form["wing_type_id"])
+        size_designator = request.form["size"]
+        size_projected_sqm = float(request.form["projected_area"])
+
+        db = get_db()
+        db.execute(
+            """
+            UPDATE wing
+            SET
+                wing_type_id = ?,
+                size_designator = ?,
+                size_projected_sqm = ?
+            WHERE id = ?
+            """,
+            (
+                wing_type_id,
+                size_designator,
+                size_projected_sqm,
+                id,
+            ),
+        )
+        db.commit()
+        return redirect(url_for("wing.index"))
+
+    db = get_db()
+    types = db.execute(
+        """
+        SELECT
+            wt.id as id,
+            wt.name as name,
+            wm.name as manufacturer
+        FROM wing_type wt
+            JOIN wing_manufacturer wm ON wt.wing_manufacturer_id = wm.id
+        """
+    ).fetchall()
+    can_delete = (
+        db.execute(
+            """
+        SELECT
+            COUNT(*)
+        FROM wing w
+        WHERE w.wing_type_id = ?
+        """,
+            (id,),
+        ).fetchone()[0]
+        == 0
+    )
+
+    return render_template("wing/update.html", wing=wing, types=types, can_delete=can_delete)
+
+
+@wing.route("/<int:id>/delete", methods=("POST",))
+def delete(id):
+    get_wing(id)
+    db = get_db()
+    db.execute("DELETE FROM wing WHERE id = ?", (id,))
+    db.commit()
+    return redirect(url_for("wing.index"))

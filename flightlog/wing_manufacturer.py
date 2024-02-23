@@ -81,7 +81,7 @@ def get_wing_manufacturer(id):
     return manufacturer
 
 
-@wing_manufacturer.route("/<int:id>/edit", methods=("GET", "POST"))
+@wing_manufacturer.route("/<int:id>/update", methods=("GET", "POST"))
 def update(id):
     wing_manufacturer = get_wing_manufacturer(id)
 
@@ -100,7 +100,21 @@ def update(id):
         db.commit()
         return redirect(url_for("wing_manufacturer.index"))
 
-    return render_template("wing_manufacturer/update.html", wing_manufacturer=wing_manufacturer)
+    db = get_db()
+    can_delete = (
+        db.execute(
+            """
+        SELECT
+            COUNT(*)
+        FROM wing w
+        WHERE w.wing_type_id = ?
+        """,
+            (id,),
+        ).fetchone()[0]
+        == 0
+    )
+
+    return render_template("wing_manufacturer/update.html", wing_manufacturer=wing_manufacturer, can_delete=can_delete)
 
 
 @wing_manufacturer.route("/<int:id>/delete", methods=("POST",))
