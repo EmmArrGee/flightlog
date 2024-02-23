@@ -81,3 +81,97 @@ def create():
     ).fetchall()
 
     return render_template("site/create.html", countries=countries)
+
+
+def get_site(id):
+    site = (
+        get_db()
+        .execute(
+            """
+            SELECT
+                s.id as id,
+                s.name as name,
+                c.shorty as country,
+                s.elevation as elevation,
+                s.is_launch as is_launch,
+                s.is_landing as is_landing
+            FROM site s
+                JOIN country c ON s.country_id = c.id
+            WHERE s.id = ?
+            """,
+            (id,),
+        )
+        .fetchone()
+    )
+
+    if site is None:
+        abort(404, f"Site ID {id} doesn't exist.")
+
+    return site
+
+
+@site.route("/<int:id>/update", methods=("GET", "POST"))
+def update(id):
+    site = get_site(id)
+
+    if request.method == "POST":
+        name = request.form["name"]
+        country_id = int(request.form["country"])
+        elevation = int(request.form["elevation"])
+        is_launch = True if "is_launch" in request.form else False
+        is_landing = True if "is_landing" in request.form else False
+
+        db = get_db()
+        db.execute(
+            """
+            UPDATE site
+            SET
+                name = ?,
+                country_id = ?,
+                elevation = ?,
+                is_launch = ?,
+                is_landing = ?
+            WHERE id = ?
+            """,
+            (name, country_id, elevation, is_launch, is_landing, id),
+        )
+        db.commit()
+        return redirect(url_for("site.index"))
+
+    db = get_db()
+    countries = db.execute(
+        """
+        SELECT
+            c.id as id,
+            c.name as name,
+            c.shorty as shorty
+        FROM country c
+        ORDER BY c.name ASC
+        """
+    ).fetchall()
+    can_delete = (
+        db.execute(
+            """
+        SELECT
+            COUNT(*)
+        FROM flight f
+        WHERE f.launch_site_id = ? OR f.landing_site_id = ?
+        """,
+            (
+                id,
+                id,
+            ),
+        ).fetchone()[0]
+        == 0
+    )
+
+    return render_template("site/update.html", site=site, countries=countries, can_delete=can_delete)
+
+
+@site.route("/<int:id>/delete", methods=("POST",))
+def delete(id):
+    get_site(id)
+    db = get_db()
+    db.execute("DELETE FROM site WHERE id = ?", (id,))
+    db.commit()
+    return redirect(url_for("site.index"))

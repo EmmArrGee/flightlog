@@ -106,8 +106,8 @@ def update(id):
             """
         SELECT
             COUNT(*)
-        FROM wing w
-        WHERE w.wing_type_id = ?
+        FROM wing_type wt
+        WHERE wt.wing_manufacturer_id = ?
         """,
             (id,),
         ).fetchone()[0]
