@@ -1,35 +1,44 @@
 {% extends "base.html" %}
 
 {% block header %}
-    <h1>{% block title %}Create new site{% endblock %}</h1>
+    <h3 class="flex items-center px-6 text-2xl font-semibold dark:text-white">
+        {% block title %}Create new site{% endblock %}
+    </h3>
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form class="max-w-sm mx-auto" method="post">
+        <div class="mb-5">
+            <label for="name" class="block mb-2 text-lg font-semibold text-gray-900 dark:text-white">Name</label>
+            <input type="text" id="name" name="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+        </div>
 
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name">
+        <div class="mb-5">
+            <label for="country" class="block mb-2 text-lg font-semibold text-gray-900 dark:text-white">Country</label>
+            <select id="country" name="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                {% for country in countries %}
+                    <option value="{{ country['id'] }}">{{ country["name"] }} ({{ country["shorty"] }})</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="country">Country</label>
-        <select name="country" id="country">
-            {% for country in countries %}
-                <option value="{{ country['id'] }}">{{ country["name"] }} ({{ country["shorty"] }})</option>
-            {% endfor %}
-        </select>
+        <div class="mb-5">
+            <label for="elevation" class="block mb-2 text-lg font-semibold text-gray-900 dark:text-white">Elevation [m]</label>
+            <input type="number" id="elevation" name="elevation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+        </div>
 
-        <label for="elevation">Elevation [m]</label>
-        <input type="number" id="elevation" name="elevation">
+        <div class="flex items-center mb-4">
+            <input type="checkbox" id="is_launch" name="is_launch" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="is_launch" class="ms-2 text-lg font-semibold text-gray-900 dark:text-gray-300">Launch</label>
+        </div>
 
-        <label for="is_launch">Launch</label>
-        <input type="checkbox" id="is_launch" name="is_launch">
+        <div class="flex items-center mb-4">
+            <input type="checkbox" id="is_landing" name="is_landing" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="is_landing" class="ms-2 text-lg font-semibold text-gray-900 dark:text-gray-300">Landing</label>
+        </div>
 
-        <label for="is_landing">Landing</label>
-        <input type="checkbox" id="is_landing" name="is_landing">
-
-        <input type="submit" value="Save">
-    </form>
-
-    <form action="{{ url_for('country.index') }}">
-        <input type="submit" value="Manage countries">
+        <div class="mb-5 py-4 text-center">
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-60 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+        </div>
     </form>
 {% endblock %}
