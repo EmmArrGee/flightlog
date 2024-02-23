@@ -62,3 +62,69 @@ def create():
         return redirect(url_for("country.index"))
 
     return render_template("country/create.html")
+
+
+def get_country(id):
+    db = get_db()
+    country = db.execute(
+        """
+        SELECT
+            c.id as id,
+            c.name as name,
+            c.shorty as shorty
+        FROM country c
+        WHERE c.id = ?
+        """,
+        (id,),
+    ).fetchone()
+
+    if country is None:
+        abort(404, f"Country id {id} doesn't exist.")
+
+    return country
+
+
+@country.route("/<int:id>/update", methods=("GET", "POST"))
+def update(id):
+    country = get_country(id)
+
+    if request.method == "POST":
+        name = request.form["name"]
+        shorty = request.form["shorty"]
+
+        db = get_db()
+        db.execute(
+            """
+            UPDATE country
+            SET name = ?, shorty = ?
+            WHERE id = ?
+            """,
+            (name, shorty, id),
+        )
+        db.commit()
+        return redirect(url_for("country.index"))
+
+    db = get_db()
+    can_delete = (
+        db.execute(
+            """
+        SELECT
+            COUNT(*)
+        FROM site s
+        WHERE s.country_id = ?
+        """,
+            (id,),
+        ).fetchone()[0]
+        == 0
+    )
+
+    return render_template("country/update.html", country=country, can_delete=can_delete)
+
+
+@country.route("/<int:id>/delete", methods=("POST",))
+def delete(id):
+    get_country(id)
+    db = get_db()
+    db.execute("DELETE FROM country WHERE id = ?", (id,))
+    db.commit()
+    return redirect(url_for("country.index"))
