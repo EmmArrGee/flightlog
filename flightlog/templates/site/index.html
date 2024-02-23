@@ -36,6 +36,7 @@
                 </div></a></th>
                 <th scope="col" class="px-6 py-3 text-center">Launch</th>
                 <th scope="col" class="px-6 py-3 text-center">Landing</th>
+                <th scope="col" class="px-6 py-3 text-center">Inofficial</th>
                 <th scope="col" class="px-6 py-3"><a href="{{ url_for('site.index', sort='flights') }}"><div class="flex items-center">
                     Total flights
                     <svg class="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -65,6 +66,7 @@
                     <td class="px-6 py-4">{{ site['elevation'] }}m</td>
                     <td class="px-6 py-4 text-center">{% if site["is_launch"] == 1 %}&#10003;{% endif %}</td>
                     <td class="px-6 py-4 text-center">{% if site["is_landing"] == 1 %}&#10003;{% endif %}</td>
+                    <td class="px-6 py-4 text-center">{% if site["is_inofficial"] == 1 %}&#10003;{% endif %}</td>
                     <td class="px-6 py-4">{{ site['total_flights'] }}</td>
                     <td class="px-6 py-4">{{ site['total_flight_time'] }}</td>
                     <td class="px-6 py-4">{{ site['last_visited'] }}</td>

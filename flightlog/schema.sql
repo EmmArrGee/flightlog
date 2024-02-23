@@ -100,6 +100,7 @@ CREATE TABLE site (
     elevation INTEGER NOT NULL,
     is_launch INTEGER NOT NULL,
     is_landing INTEGER NOT NULL,
+    is_inofficial INTEGER NOT NULL,
     FOREIGN KEY (country_id) REFERENCES country (id) ON DELETE RESTRICT
 );
 

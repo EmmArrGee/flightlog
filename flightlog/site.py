@@ -29,6 +29,7 @@ def index():
             s.elevation as elevation,
             s.is_launch as is_launch,
             s.is_landing as is_landing,
+            s.is_inofficial as is_inofficial,
             COUNT(DISTINCT f.id) as total_flights,
             (SUM(f.duration_minutes) / 60) || 'h ' || (SUM(f.duration_minutes) % 60) || 'm' as total_flight_time,
             MAX(f.date) as last_visited
@@ -56,14 +57,15 @@ def create():
         elevation = int(request.form["elevation"])
         is_launch = True if "is_launch" in request.form else False
         is_landing = True if "is_landing" in request.form else False
+        is_inofficial = True if "is_inofficial" in request.form else False
 
         db = get_db()
         db.execute(
             """
-            INSERT INTO site (name, country_id, elevation, is_launch, is_landing)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO site (name, country_id, elevation, is_launch, is_landing, is_inofficial)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (name, country_id, elevation, is_launch, is_landing),
+            (name, country_id, elevation, is_launch, is_landing, is_inofficial),
         )
         db.commit()
         return redirect(url_for("site.index"))
@@ -94,7 +96,8 @@ def get_site(id):
                 c.shorty as country,
                 s.elevation as elevation,
                 s.is_launch as is_launch,
-                s.is_landing as is_landing
+                s.is_landing as is_landing,
+                s.is_inofficial as is_inofficial
             FROM site s
                 JOIN country c ON s.country_id = c.id
             WHERE s.id = ?
@@ -120,6 +123,7 @@ def update(id):
         elevation = int(request.form["elevation"])
         is_launch = True if "is_launch" in request.form else False
         is_landing = True if "is_landing" in request.form else False
+        is_inofficial = True if "is_inofficial" in request.form else False
 
         db = get_db()
         db.execute(
@@ -130,10 +134,11 @@ def update(id):
                 country_id = ?,
                 elevation = ?,
                 is_launch = ?,
-                is_landing = ?
+                is_landing = ?,
+                is_inofficial = ?
             WHERE id = ?
             """,
-            (name, country_id, elevation, is_launch, is_landing, id),
+            (name, country_id, elevation, is_launch, is_landing, is_inofficial, id),
         )
         db.commit()
         return redirect(url_for("site.index"))
