@@ -1,5 +1,7 @@
 import os
+import shutil
 
+from datetime import datetime
 from flask import Flask, url_for, redirect
 
 
@@ -42,5 +44,22 @@ def create_app(test_config=None):
     app.register_blueprint(site.site, url_prefix="/site")
     app.register_blueprint(country.country, url_prefix="/country")
     app.register_blueprint(flight_type.flight_type, url_prefix="/flight_type")
+
+    # create backup
+    if os.path.isfile(os.path.join(app.instance_path, "backup.cfg")):
+        with open(os.path.join(app.instance_path, "backup.cfg")) as f:
+            backup_dir = f.readline()
+        if os.path.isdir(backup_dir):
+            backup_filename = f"flightlog-bkp-{datetime.now().strftime('%Y%m%d_%H%M%S')}.sqlite"
+            shutil.copyfile(app.config["DATABASE"], os.path.join(backup_dir, backup_filename))
+
+            # keep most recent 25 backups
+            backup_files = os.listdir(backup_dir)
+            backup_files.sort(reverse=True)
+            for file in backup_files[25:]:
+                os.remove(os.path.join(backup_dir, file))
+
+        else:
+            print("WARNING: No backup directory configured")
 
     return app
