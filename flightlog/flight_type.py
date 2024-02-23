@@ -57,3 +57,61 @@ def create():
         return redirect(url_for("flight.create"))
 
     return render_template("flight_type/create.html")
+
+
+def get_flight_type(id):
+    flight_type = (
+        get_db()
+        .execute(
+            """
+            SELECT
+                ft.id as id,
+                ft.name as name
+            FROM flight_type ft
+            WHERE ft.id = ?
+            """,
+            (id,),
+        )
+        .fetchone()
+    )
+
+    if flight_type is None:
+        abort(404, f"Flight type id {id} doesn't exist.")
+
+    return flight_type
+
+
+@flight_type.route("/<int:id>/update", methods=("GET", "POST"))
+def update(id):
+    flight_type = get_flight_type(id)
+
+    if request.method == "POST":
+        name = request.form["name"]
+
+        db = get_db()
+        db.execute(
+            """
+            UPDATE flight_type
+            SET name = ?
+            WHERE id = ?
+            """,
+            (name, id),
+        )
+        db.commit()
+        return redirect(url_for("flight_type.index"))
+
+    db = get_db()
+    can_delete = (
+        db.execute(
+            """
+        SELECT
+            COUNT(*)
+        FROM flight f
+        WHERE f.flight_type_id = ?
+        """,
+            (id,),
+        ).fetchone()[0]
+        == 0
+    )
+
+    return render_template("flight_type/update.html", flight_type=flight_type, can_delete=can_delete)
