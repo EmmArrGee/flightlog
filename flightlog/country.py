@@ -25,12 +25,20 @@ def index():
             c.id as id,
             c.name as name,
             c.shorty as shorty,
-            COUNT(DISTINCT f.id) as total_flights,
+            COUNT(DISTINCT f.flight_id) as total_flights,
             (SUM(f.duration_minutes) / 60) || 'h ' || (SUM(f.duration_minutes) % 60) || 'm' as total_flight_time,
             MAX(f.date) as last_visited
         FROM country c
-            LEFT JOIN site s ON c.id = s.country_id
-            LEFT JOIN flight f ON s.id = f.launch_site_id OR s.id = f.landing_site_id
+            LEFT JOIN (
+                SELECT DISTINCT
+                    f.id as flight_id,
+                    f.duration_minutes as duration_minutes,
+                    f.date as date,
+                    c.id as country_id
+                FROM flight f
+                    JOIN site s ON f.launch_site_id = s.id OR f.landing_site_id = s.id
+                    JOIN country c ON s.country_id = c.id
+            ) f ON c.id = f.country_id
         GROUP BY c.id
         ORDER BY
             {sort_criteria[0]} {sort_criteria[1]},
