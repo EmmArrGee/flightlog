@@ -60,3 +60,53 @@ def create():
         return redirect(url_for("wing_manufacturer.index"))
 
     return render_template("wing_manufacturer/create.html")
+
+
+def get_wing_manufacturer(id):
+    db = get_db()
+    manufacturer = db.execute(
+        """
+        SELECT
+            wm.id as id,
+            wm.name as name
+        FROM wing_manufacturer wm
+        WHERE wm.id = ?
+        """,
+        (id,),
+    ).fetchone()
+
+    if manufacturer is None:
+        abort(404, f"Wing manufacturer id {id} doesn't exist.")
+
+    return manufacturer
+
+
+@wing_manufacturer.route("/<int:id>/edit", methods=("GET", "POST"))
+def update(id):
+    wing_manufacturer = get_wing_manufacturer(id)
+
+    if request.method == "POST":
+        name = request.form["name"]
+
+        db = get_db()
+        db.execute(
+            """
+            UPDATE wing_manufacturer
+            SET name = ?
+            WHERE id = ?
+            """,
+            (name, id),
+        )
+        db.commit()
+        return redirect(url_for("wing_manufacturer.index"))
+
+    return render_template("wing_manufacturer/update.html", wing_manufacturer=wing_manufacturer)
+
+
+@wing_manufacturer.route("/<int:id>/delete", methods=("POST",))
+def delete(id):
+    get_wing_manufacturer(id)
+    db = get_db()
+    db.execute("DELETE FROM wing_manufacturer WHERE id = ?", (id,))
+    db.commit()
+    return redirect(url_for("wing_manufacturer.index"))
