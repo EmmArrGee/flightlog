@@ -13,8 +13,8 @@ def index():
     flights = db.execute(
         """
         SELECT
-            ROW_NUMBER() OVER (ORDER BY f.date ASC, f.id ASC) as flight_no,
             f.id as id,
+            f.flight_no as flight_no,
             f.date as date,
             wm.name as wing_manufacturer,
             wt.name as wing_name,
@@ -184,6 +184,7 @@ def get_flight(id):
             """
         SELECT
             f.id as id,
+            f.flight_no as flight_no,
             f.date as date,
             w.id as wing_id,
             laus.id as launch_site_id,
