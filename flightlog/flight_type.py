@@ -54,7 +54,7 @@ def create():
             (name,),
         )
         db.commit()
-        return redirect(url_for("flight.create"))
+        return redirect(url_for("flight_type.index"))
 
     return render_template("flight_type/create.html")
 
@@ -115,3 +115,18 @@ def update(id):
     )
 
     return render_template("flight_type/update.html", flight_type=flight_type, can_delete=can_delete)
+
+
+@flight_type.route("/<int:id>/delete", methods=("POST",))
+def delete(id):
+    get_flight_type(id)
+    db = get_db()
+    db.execute(
+        """
+        DELETE FROM flight_type
+        WHERE id = ?
+        """,
+        (id,),
+    )
+    db.commit()
+    return redirect(url_for("flight_type.index"))
