@@ -31,7 +31,7 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from . import flight, wing, wing_type, wing_manufacturer, site, country, flight_type
+    from . import flight, wing, wing_type, wing_manufacturer, site, country, flight_type, report
 
     @app.route("/")
     def index():
@@ -44,6 +44,7 @@ def create_app(test_config=None):
     app.register_blueprint(site.site, url_prefix="/site")
     app.register_blueprint(country.country, url_prefix="/country")
     app.register_blueprint(flight_type.flight_type, url_prefix="/flight_type")
+    app.register_blueprint(report.report, url_prefix="/report")
 
     # create backup
     if os.path.isfile(os.path.join(app.instance_path, "backup.cfg")):
