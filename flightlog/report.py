@@ -76,11 +76,14 @@ def generate_pdf():
     if path.isfile(pilot_config_path):
         with open(pilot_config_path, "r") as f:
             lines = f.readlines()
+            pilot_info = {}
             if len(lines) == 2:
-                pilot_info = {
-                    "Pilot": lines[0].strip(),
-                    "License No.": lines[1].strip(),
-                }
+                pilot_info["Pilot"] = lines[0].strip()
+                pilot_info["License No."] = lines[1].strip()
+            if "Pilot" not in pilot_info:
+                pilot_info["Pilot"] = "Anonymous"
+            if "License No." not in pilot_info:
+                pilot_info["License No."] = "N/A"
 
     pdf_report = generate_pdf_file(pilot_info, summary_data, flightlog_data)
     report_filename = f"flightlog-{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
@@ -91,7 +94,15 @@ def generate_pdf_file(pilot_info: dict, summary: dict, flightlog: dict):
     pdf_report = BytesIO()
 
     elements = []
-    doc = SimpleDocTemplate(pdf_report, rightMargin=1 * cm, leftMargin=1 * cm, topMargin=1 * cm, bottomMargin=1.5 * cm)
+    doc = SimpleDocTemplate(
+        pdf_report,
+        author=pilot_info.get("Pilot", "Anonymous"),
+        title="Flightlog",
+        rightMargin=1 * cm,
+        leftMargin=1 * cm,
+        topMargin=1 * cm,
+        bottomMargin=1.5 * cm,
+    )
 
     # title
     elements.append(Paragraph("Flightlog", ParagraphStyle("title", fontName="Helvetica-Bold", fontSize=24)))
